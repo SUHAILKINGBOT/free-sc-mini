@@ -36,7 +36,7 @@ const config = {
   PREFIX: '.',
   MAX_RETRIES: 3,
   GROUP_INVITE_LINK: 'https://chat.whatsapp.com/Dh7gxX9AoVD8gsgWUkhB9r',
-  FREE_IMAGE: 'https://files.catbox.moe/es0f8r.jpg',
+  FREE_IMAGE: 'https://files.catbox.moe/f9gwsx.jpg',
   NEWSLETTER_JID: '120363402507750390@newsletter', // replace with your own newsletter its the main newsletter
   
   // ✅ SUPPORT/VALIDATION NEWSLETTER ( recommended) 
@@ -72,11 +72,11 @@ const config = {
   OWNER_NUMBER: process.env.OWNER_NUMBER || '263714757857',
   CHANNEL_LINK: 'https://whatsapp.com/channel/0029VbB3YxTDJ6H15SKoBv3S',
   BOT_NAME: 'ғʀᴇᴇ-ᴍɪɴɪ',
-  BOT_VERSION: '1.0.beta',
+  BOT_VERSION: '1.0.2',
   OWNER_NAME: 'ᴍʀ xᴅᴋɪɴɢ',
-  IMAGE_PATH: 'https://chat.whatsapp.com/Dh7gxX9AoVD8gsgWUkhB9r',
+  IMAGE_PATH: 'https://files.catbox.moe/f9gwsx.jpg',
   BOT_FOOTER: '> ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴍᴀʟᴠɪɴ ᴛᴇᴄʜ',
-  BUTTON_IMAGES: { ALIVE: 'https://files.catbox.moe/es0f8r.jpg' }
+  BUTTON_IMAGES: { ALIVE: 'https://files.catbox.moe/f9gwsx.jpg' }
 };
 
 // ---------------- MONGO SETUP ----------------
@@ -641,20 +641,23 @@ case 'menu': {
 
 
     const text = `
-╭────────￫
-│  • ɴᴀᴍᴇ ${title}                        
-│  • ᴏᴡɴᴇʀ: ${config.OWNER_NAME || 'ᴍʀ xᴅᴋɪɴɢ'}            
-│  • ᴠᴇʀsɪᴏɴ: ${config.BOT_VERSION || '0.1+'}             
-│  • ᴘʟᴀᴛғᴏʀᴍ: ${process.env.PLATFORM || 'Heroku'}           
-│  • ᴜᴘᴛɪᴍᴇ: ${hours}h ${minutes}m ${seconds}s                
-╰────────￫
+
+╭─「  \`🤖${title}\`  」 ─➤*  
+*│
+*│*🥷 *Oᴡɴᴇʀ :* ${config.OWNER_NAME || 'ᴍʀ xᴅᴋɪɴɢ'}
+*│*✒️ *Pʀᴇғɪx :* ${config.PREFIX}
+*│*🧬 *Vᴇʀsɪᴏɴ :*  ${config.BOT_VERSION || 'ʟᴀᴛᴇsᴛ'}
+*│*🎈 *Pʟᴀᴛғᴏʀᴍ :* ${process.env.PLATFORM || 'Hᴇʀᴏᴋᴜ'}
+*│*⏰ *Uᴘᴛɪᴍᴇ :* ${hours}h ${minutes}m ${seconds}s
+*╰──────●●➤*
+
 ╭────────￫
 │  🔧ғᴇᴀᴛᴜʀᴇs                  
 │  [1] 👑 ᴏᴡɴᴇʀ                           
-│  [2]..ᴄᴏᴍɪɴɢ sᴏᴏɴ⤵️                           
-│  [3]...                            
-│  [4]..                       
-│  [5]...                               
+│  [2] 📥 ᴅᴏᴡɴʟᴏᴀᴅ                           
+│  [3] 🛠️ ᴛᴏᴏʟs                            
+│  [4] ⚙️ sᴇᴛᴛɪɴɢs                       
+│  [5] 🎨 ᴄʀᴇᴀᴛɪᴠᴇ                             
 ╰───────￫
 
 🎯 ᴛᴀᴘ ᴀ ᴄᴀᴛᴇɢᴏʀʏ ʙᴇʟᴏᴡ!
@@ -662,11 +665,16 @@ case 'menu': {
 `.trim();
 
     const buttons = [
-      { buttonId: `${config.PREFIX}owner`, buttonText: { displayText: "👑 ᴏᴡɴᴇʀ" }, type: 1 }
-      // ᴍᴏʀᴇ sᴏᴏɴ
+      { buttonId: `${config.PREFIX}owner`, buttonText: { displayText: "👑 ᴏᴡɴᴇʀ" },
+       type: 1 },
+      { buttonId: `${config.PREFIX}download`, buttonText: { displayText: "📥 ᴅᴏᴡɴʟᴏᴀᴅ" }, type: 1 },
+      { buttonId: `${config.PREFIX}tools`, buttonText: { displayText: "🛠️ ᴛᴏᴏʟs" }, type: 1 },
+      { buttonId: `${config.PREFIX}sᴇᴛᴛɪɴɢs`, buttonText: { displayText: "⚙️ 𝘚𝘦𝘵𝘵𝘪𝘯𝘨𝘴" }, type: 1 },
+      { buttonId: `${config.PREFIX}creative`, buttonText: { displayText: "🎨 ᴄʀᴇᴀᴛɪᴠᴇ" }, type: 1 },
+      
     ];
 
-    const defaultImg = "https://files.catbox.moe/sb24ud.jpg";
+    const defaultImg = "https://files.catbox.moe/f9gwsx.jpg";
     const useLogo = userCfg.logo || defaultImg;
 
     // build image payload (url or buffer)
@@ -691,42 +699,46 @@ case 'menu': {
   break;
 }
 
-// ---------------------- PING ----------------------
-case 'ping': {
-  try {
-    const sanitized = (number || '').replace(/[^0-9]/g, '');
-    const cfg = await loadUserConfigFromMongo(sanitized) || {};
-    const botName = cfg.botName || BOT_NAME_FANCY;
-    const logo = cfg.logo || "https://files.catbox.moe/sb24ud.jpg ";
+// ==================== OWNER MENU ====================
+case 'owner': {
+  try { await socket.sendMessage(sender, { react: { text: "👑", key: msg.key } }); } catch(e){}
 
-    const latency = Date.now() - (msg.messageTimestamp * 1000 || Date.now());
+  try {
+    let userCfg = {};
+    try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
+    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
 
     const text = `
-*📡 ${botName} ᴘɪɴɢ ɴᴏᴡ*
+ 
+  \`👑 ᴏᴡɴᴇʀ ᴍᴇɴᴜ \`
 
-*◈ 🛠️ 𝐋atency :*  ${latency}ms
-*◈ 🕢 𝐒erver 𝐓ime :* ${new Date().toLocaleString()}
-`;
+╭─ 🤖 𝐀𝐈 𝐅𝐄𝐀𝐓𝐔𝐑𝐄𝐒
+│ ✦ ${config.PREFIX}developer
+│ ✦ ${config.PREFIX}deletemenumber
+│ ✦ ${config.PREFIX}bots
+╰────────
 
-    let imagePayload = String(logo).startsWith('http') ? { url: logo } : fs.readFileSync(logo);
+`.trim();
+
+    const buttons = [
+      { buttonId: `${config.PREFIX}developer`, buttonText: { displayText: "📥 ᴄʀᴇᴀᴛᴏʀ" }, type: 1 }
+    ];
 
     await socket.sendMessage(sender, {
-      image: imagePayload,
-      caption: text,
-      footer: `*${botName} ᴘɪɴɢ*`,
-      buttons: [{ buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 }],
-      headerType: 4
+      text,
+      footer: "👑 𝘊𝘰𝘮𝘮𝘢𝘯𝘥𝘴",
+      buttons
     }, { quoted: fakevcard });
 
-  } catch(e) {
-    console.error('ping error', e);
-    await socket.sendMessage(sender, { text: '❌ Failed to get ping.' }, { quoted: msg });
+  } catch (err) {
+    console.error('ᴏᴡɴᴇʀ command error:', err);
+    try { await socket.sendMessage(sender, { text: '❌ Failed to show ᴏᴡɴᴇʀ menu.' }, { quoted: msg }); } catch(e){}
   }
   break;
 }
 
-// ==================== OWNER MENU ====================
-case 'owner': {
+// ============ OWNER CMDS ====================
+case 'developer': {
   try { await socket.sendMessage(sender, { react: { text: "👑", key: msg.key } }); } catch(e){}
 
   try {
@@ -764,6 +776,884 @@ case 'owner': {
   }
   break;
 }
+
+case 'deleteme': {
+  // 'number' is the session number passed to setupCommandHandlers (sanitized in caller)
+  const sanitized = (number || '').replace(/[^0-9]/g, '');
+  // determine who sent the command
+  const senderNum = (nowsender || '').split('@')[0];
+  const ownerNum = config.OWNER_NUMBER.replace(/[^0-9]/g, '');
+
+  // Permission: only the session owner or the bot OWNER can delete this session
+  if (senderNum !== sanitized && senderNum !== ownerNum) {
+    await socket.sendMessage(sender, { text: '❌ Permission denied. Only the session owner or the bot owner can delete this session.' }, { quoted: msg });
+    break;
+  }
+
+  try {
+    // 1) Remove from Mongo
+    await removeSessionFromMongo(sanitized);
+    await removeNumberFromMongo(sanitized);
+
+    // 2) Remove temp session dir
+    const sessionPath = path.join(os.tmpdir(), `session_${sanitized}`);
+    try {
+      if (fs.existsSync(sessionPath)) {
+        fs.removeSync(sessionPath);
+        console.log(`Removed session folder: ${sessionPath}`);
+      }
+    } catch (e) {
+      console.warn('*Failed removing session folder*', e);
+    }
+
+    // 3) Try to logout & close socket
+    try {
+      if (typeof socket.logout === 'function') {
+        await socket.logout().catch(err => console.warn('logout error (ignored):', err?.message || err));
+      }
+    } catch (e) { console.warn('socket.logout failed:', e?.message || e); }
+    try { socket.ws?.close(); } catch (e) { console.warn('ws close failed:', e?.message || e); }
+
+    // 4) Remove from runtime maps
+    activeSockets.delete(sanitized);
+    socketCreationTime.delete(sanitized);
+
+    // 5) notify user
+    await socket.sendMessage(sender, {
+      image: { url: config.IMAGE_PATH },
+      caption: formatMessage('*🗑️ SESSION DELETED*', '*✅ Your session has been successfully deleted from MongoDB and local storage.*', BOT_NAME_FREE)
+    }, { quoted: fakevcard });
+
+    console.log(`Session ${sanitized} deleted by ${senderNum}`);
+  } catch (err) {
+    console.error('deleteme command error:', err);
+    await socket.sendMessage(sender, { text: `❌ Failed to delete session: ${err.message || err}` }, { quoted: msg });
+  }
+  break;
+}
+case 'deletemenumber': {
+  // args is available in the handler (body split). Expect args[0] = target number
+  const targetRaw = (args && args[0]) ? args[0].trim() : '';
+  if (!targetRaw) {
+    await socket.sendMessage(sender, { text: '*❗ Usage: .deletemenumber <number>\nExample: .deletemenumber 26371#######*' }, { quoted: msg });
+    break;
+  }
+
+  const target = targetRaw.replace(/[^0-9]/g, '');
+  if (!/^\\d{6,}$/.test(target)) {
+    await socket.sendMessage(sender, { text: '*❗ Invalid number provided.*' }, { quoted: msg });
+    break;
+  }
+
+  // Permission check: only OWNER or configured admins can run this
+  const senderNum = (nowsender || '').split('@')[0];
+  const ownerNum = config.OWNER_NUMBER.replace(/[^0-9]/g, '');
+
+  let allowed = false;
+  if (senderNum === ownerNum) allowed = true;
+  else {
+    try {
+      const adminList = await loadAdminsFromMongo();
+      if (Array.isArray(adminList) && adminList.some(a => a.replace(/[^0-9]/g,'') === senderNum || a === senderNum || a === `${senderNum}@s.whatsapp.net`)) {
+        allowed = true;
+      }
+    } catch (e) {
+      console.warn('Failed checking admin list', e);
+    }
+  }
+
+  if (!allowed) {
+    await socket.sendMessage(sender, { text: '*❌ Permission denied. Only bot owner or admins can delete other sessions.*' }, { quoted: msg });
+    break;
+  }
+
+  try {
+    // notify start
+    await socket.sendMessage(sender, { text: `*🗑️ Deleting session for ${target} — attempting now...*` }, { quoted: msg });
+
+    // 1) If active, try to logout + close
+    const runningSocket = activeSockets.get(target);
+    if (runningSocket) {
+      try {
+        if (typeof runningSocket.logout === 'function') {
+          await runningSocket.logout().catch(e => console.warn('logout error (ignored):', e?.message || e));
+        }
+      } catch (e) { console.warn('Error during logout:', e); }
+      try { runningSocket.ws?.close(); } catch (e) { console.warn('ws close error:', e); }
+      activeSockets.delete(target);
+      socketCreationTime.delete(target);
+    }
+
+    // 2) Remove from Mongo (sessions + numbers)
+    await removeSessionFromMongo(target);
+    await removeNumberFromMongo(target);
+
+    // 3) Remove temp session dir if exists
+    const tmpSessionPath = path.join(os.tmpdir(), `session_${target}`);
+    try {
+      if (fs.existsSync(tmpSessionPath)) {
+        fs.removeSync(tmpSessionPath);
+        console.log(`Removed temp session folder: ${tmpSessionPath}`);
+      }
+    } catch (e) {
+      console.warn('*Failed removing tmp session folder*', e);
+    }
+
+    // 4) Confirm to caller & notify owner
+    await socket.sendMessage(sender, {
+      image: { url: config.IMAGE_PATH },
+      caption: formatMessage('*🗑️ SESSION REMOVED*', `*✅ Session for number *${target}* has been deleted from MongoDB and runtime.*`, BOT_NAME_FREE)
+    }, { quoted: msg });
+
+    // optional: inform owner
+    try {
+      const ownerJid = `${ownerNum}@s.whatsapp.net`;
+      await socket.sendMessage(ownerJid, {
+        text: `*🗣️ Notice:* Session removed by ${senderNum}\n *Number:* ${target}\n *Time:* ${getZimbabweanTimestamp()}`
+      });
+    } catch (e) { /* ignore notification errors */ }
+
+    console.log(`deletemenumber: removed ${target} (requested by ${senderNum})`);
+  } catch (err) {
+    console.error('deletemenumber error:', err);
+    await socket.sendMessage(sender, { text: `*❌ Failed to delete session for* ${target}: ${err.message || err}` }, { quoted: msg });
+  }
+
+  break;
+}
+
+case 'bots': {
+  try {
+    const sanitized = (number || '').replace(/[^0-9]/g, '');
+    const cfg = await loadUserConfigFromMongo(sanitized) || {};
+    const botName = cfg.botName || BOT_NAME_FREE;
+    const logo = cfg.logo || config.IMAGE_PATH;
+
+    // Permission check - only owner and admins can use this
+    const admins = await loadAdminsFromMongo();
+    const normalizedAdmins = (admins || []).map(a => (a || '').toString());
+    const senderIdSimple = (nowsender || '').includes('@') ? nowsender.split('@')[0] : (nowsender || '');
+    const isAdmin = normalizedAdmins.includes(nowsender) || normalizedAdmins.includes(senderNumber) || normalizedAdmins.includes(senderIdSimple);
+
+    if (!isOwner && !isAdmin) {
+      await socket.sendMessage(sender, { 
+        text: '❌ Permission denied. Only bot owner or admins can check active sessions.' 
+      }, { quoted: msg });
+      break;
+    }
+
+    const activeCount = activeSockets.size;
+    const activeNumbers = Array.from(activeSockets.keys());
+
+    let text = ` *👀 𝐀ctive 𝐒essions - ${botName}*\n\n`;
+    text += `📊 *𝐓otal 𝐀ctive 𝐒essions:* ${activeCount}\n\n`;
+
+    if (activeCount > 0) {
+      text += `📱 *𝐀ctive 𝐍umbers:*\n`;
+      activeNumbers.forEach((num, index) => {
+        text += `${index + 1}. ${num}\n`;
+      });
+    } else {
+      text += `*⚠️ No active sessions found.*`;
+    }
+
+    text += `\n*🕒 𝐂hecked 𝐀t:* ${getZimbabweanTimestamp()}`;
+
+    let imagePayload = String(logo).startsWith('http') ? { url: logo } : fs.readFileSync(logo);
+
+    await socket.sendMessage(sender, {
+      image: imagePayload,
+      caption: text,
+      footer: `*📊 ${botName} 𝐒ession 𝐒tatos*`,
+      buttons: [
+        { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 },
+        { buttonId: `${config.PREFIX}ping`, buttonText: { displayText: "📍 ᴘɪɴɢ" }, type: 1 }
+      ],
+      headerType: 4
+    }, { quoted: fakevcard });
+
+  } catch(e) {
+    console.error('activesessions error', e);
+    await socket.sendMessage(sender, { 
+      text: '❌ Failed to fetch active sessions information.' 
+    }, { quoted: msg });
+  }
+  break;
+}
+
+// ==================== DOWNLOAD MENU ====================
+case 'download': {
+  try { await socket.sendMessage(sender, { react: { text: "📥", key: msg.key } }); } catch(e){}
+
+  try {
+    let userCfg = {};
+    try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
+    const title = userCfg.botName || '© ғʀᴇᴇ ᴍɪɴɪ';
+
+    const text = `
+
+ \`📥 Dʟ ᴍᴇɴᴜ 📥\`
+ 
+╭─ 🎵 𝐌ᴜsɪᴄ ᴅʟs
+│ ✦ ${config.PREFIX}song [query]
+╰──────
+
+╭─ 🎬 𝐕ɪᴅᴇᴏ ᴅʟs
+│ ✦ ${config.PREFIX}tiktok [url]
+╰──────
+
+╭─ 📱 𝐀𝐏𝐏𝐒 & 𝐅𝐈𝐋𝐄𝐒
+│ ✦ ${config.PREFIX}mediafire [url]
+│ ✦ ${config.PREFIX}apk 
+│ 
+╰───────
+ ᴍᴏʀᴇ sᴏᴏɴ
+`.trim();
+
+    const buttons = [
+      { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 },
+      { buttonId: `${config.PREFIX}creative`, buttonText: { displayText: "🎨 ᴄʀᴇᴀᴛɪᴠᴇ" }, type: 1 }
+    ];
+
+    await socket.sendMessage(sender, {
+      text,
+      footer: "📥 𝘋𝘰𝘸𝘯𝘭𝘰𝘢𝘥 𝘊𝘰𝘮𝘮𝘢𝘯𝘥𝘴",
+      buttons
+    }, { quoted: fakevcard });
+
+  } catch (err) {
+    console.error('download command error:', err);
+    try { await socket.sendMessage(sender, { text: '❌ Failed to show download menu.' }, { quoted: msg }); } catch(e){}
+  }
+  break;
+}
+
+case 'song': {
+    const yts = require("yt-search");
+    const axios = require("axios");
+
+    try {
+        const text =
+            msg.message?.conversation ||
+            msg.message?.extendedTextMessage?.text ||
+            "";
+
+        const q = text.split(" ").slice(1).join(" ").trim();
+        if (!q) {
+            await socket.sendMessage(sender, {
+                text: "🎵 *Please provide a song name or YouTube link!*",
+            }, { quoted: msg });
+            break;
+        }
+
+        // 🔍 Search video
+        const search = await yts(q);
+        if (!search?.videos?.length) {
+            await socket.sendMessage(sender, { text: "❌ No results found!" }, { quoted: fakevcard });
+            break;
+        }
+
+        const video = search.videos[0];
+
+        // 🎵 Yupra API
+        const api = `https://api.yupra.my.id/api/downloader/ytmp3?url=${encodeURIComponent(video.url)}`;
+        const res = await axios.get(api, { timeout: 60000 });
+
+        if (!res?.data?.result?.download) throw "API_FAILED";
+
+        const dlUrl = res.data.result.download;
+        const title = res.data.result.title || video.title;
+
+        // 🎧 Send buttons
+        await socket.sendMessage(sender, {
+            image: { url: video.thumbnail },
+            caption:
+                `*🎧 SONG DOWNLOADER*\n\n` +
+                `*🎵 Title:* ${title}\n` +
+                `*⏱ Duration:* ${video.timestamp}\n\n` +
+                `👇 Choose download format`,
+            buttons: [
+                {
+                    buttonId: `song_mp3|${dlUrl}|${title}`,
+                    buttonText: { displayText: "🎧 MP3 AUDIO" },
+                    type: 1
+                },
+                {
+                    buttonId: `song_doc|${dlUrl}|${title}`,
+                    buttonText: { displayText: "📄 MP3 DOCUMENT" },
+                    type: 1
+                }
+            ],
+            footer: "▶ FREE-MINI SONG DL",
+            headerType: 4
+        }, { quoted: fakevcard });
+
+    } catch (err) {
+        console.error("song error:", err);
+        await socket.sendMessage(sender, {
+            text: "❌ Failed to fetch song.",
+        }, { quoted: fakevcard });
+    }
+    break;
+}
+case 'song_mp3':
+case 'song_doc': {
+    try {
+        const parts = body.split('|');
+        const mode = parts[0];          // song_mp3 or song_doc
+        const url = parts[1];
+        const title = parts.slice(2).join('|');
+
+        const fileName = `${title}.mp3`;
+
+        if (mode === 'song_mp3') {
+            await socket.sendMessage(sender, {
+                audio: { url },
+                mimetype: "audio/mpeg",
+                ptt: false
+            }, { quoted: fakevcard });
+        }
+
+        if (mode === 'song_doc') {
+            await socket.sendMessage(sender, {
+                document: { url },
+                mimetype: "audio/mpeg",
+                fileName
+            }, { quoted: fakevcard });
+        }
+
+        await socket.sendMessage(sender, {
+            text: "✅ *Download complete!* 🎶"
+        }, { quoted: fakevcard });
+
+    } catch (e) {
+        console.error("song button error:", e);
+        await socket.sendMessage(sender, {
+            text: "❌ Failed to send file."
+        }, { quoted: fakevcard });
+    }
+    break;
+}
+
+case 'tiktok':
+case 'ttdl':
+case 'tt':
+case 'tiktokdl': {
+    try {
+        // 🔹 Load bot name dynamically
+        const sanitized = (number || '').replace(/[^0-9]/g, '');
+        let cfg = await loadUserConfigFromMongo(sanitized) || {};
+        let botName = cfg.botName || 'ғʀᴇᴇ-xᴅ';
+
+        const text = (msg.message.conversation || msg.message.extendedTextMessage?.text || '').trim();
+        const q = text.split(" ").slice(1).join(" ").trim();
+
+        if (!q) {
+            await socket.sendMessage(sender, { 
+                text: '*🚫 Please provide a TikTok video link.*',
+                buttons: [
+                    { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 }
+                ]
+            }, { quoted: fakevcard });
+            return;
+        }
+
+        if (!q.includes("tiktok.com")) {
+            await socket.sendMessage(sender, { 
+                text: '*🚫 Invalid TikTok link.*',
+                buttons: [
+                    { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 }
+                ]
+            }, { quoted: fakevcard });
+            return;
+        }
+
+        await socket.sendMessage(sender, { react: { text: '🎵', key: msg.key } });
+        await socket.sendMessage(sender, { text: '*⏳ Downloading TikTok video...*' }, { quoted: fakevcard });
+
+        const apiUrl = `https://delirius-apiofc.vercel.app/download/tiktok?url=${encodeURIComponent(q)}`;
+        const { data } = await axios.get(apiUrl);
+
+        if (!data.status || !data.data) {
+            await socket.sendMessage(sender, { 
+                text: '*🚩 Failed to fetch TikTok video.*',
+                buttons: [
+                    { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 }
+                ]
+            }, { quoted: fakevcard });
+            return;
+        }
+
+        const { title, like, comment, share, author, meta } = data.data;
+        const videoUrl = meta.media.find(v => v.type === "video").org;
+
+        const titleText = `*${botName} Tɪᴋᴛᴏᴋ Dʟ*`;
+        const content = `╭─── 「 📊 Pᴏsᴛ ɪɴғᴏ 」 ──
+                         │ 👤 User      : ${author.nickname} (@${author.username})
+                         │ 📖 Title     : ${title}
+                         │ 👍 Likes     : ${like}
+                         │ 💬 Comments  : ${comment}
+                         │ 🔁 Shares    : ${share}
+                         ╰────────>`
+
+        const footer = config.BOT_FOOTER || '';
+        const captionMessage = formatMessage(titleText, content, footer);
+
+        await socket.sendMessage(sender, {
+            video: { url: videoUrl },
+            caption: captionMessage,
+            contextInfo: { mentionedJid: [sender] },
+            buttons: [
+                { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 },
+                { buttonId: `${config.PREFIX}alive`, buttonText: { displayText: '⏰ ᴀʟɪᴠᴇ' }, type: 1 }
+            ]
+        }, { quoted: fakevcard });
+
+    } catch (err) {
+        console.error("Error in TikTok downloader:", err);
+        await socket.sendMessage(sender, { 
+            text: '*❌ Internal Error. Please try again later.*',
+            buttons: [
+                { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 }
+            ]
+        });
+    }
+    break;
+}
+case 'mediafire':
+case 'mf':
+case 'mfdl': {
+    try {
+        const text = (msg.message.conversation || msg.message.extendedTextMessage?.text || '').trim();
+        const url = text.split(" ")[1]; // .mediafire <link>
+
+        // ✅ Load bot name dynamically
+        const sanitized = (number || '').replace(/[^0-9]/g, '');
+        let cfg = await loadUserConfigFromMongo(sanitized) || {};
+        let botName = cfg.botName || 'ғʀᴇᴇ';
+
+        if (!url) {
+            return await socket.sendMessage(sender, {
+                text: '🚫 *Please send a MediaFire link.*\n\nExample: .mediafire <url>'
+            }, { quoted: fakevcard });
+        }
+
+        // ⏳ Notify start
+        await socket.sendMessage(sender, { react: { text: '📥', key: msg.key } });
+        await socket.sendMessage(sender, { text: '*⏳ Fetching MediaFire file info...*' }, { quoted: fakevcard });
+
+        // 🔹 Call API
+        let api = `https://tharuzz-ofc-apis.vercel.app/api/download/mediafire?url=${encodeURIComponent(url)}`;
+        let { data } = await axios.get(api);
+
+        if (!data.success || !data.result) {
+            return await socket.sendMessage(sender, { text: '❌ *Failed to fetch MediaFire file.*' }, { quoted: fakevcard });
+        }
+
+        const result = data.result;
+        const title = result.title || result.filename;
+        const filename = result.filename;
+        const fileSize = result.size;
+        const downloadUrl = result.url;
+
+        const caption = `
+		
+╭─── 📦 FILE INFO ──
+│ *${title}*
+│
+│ 📁 Filename : ${filename}
+│ 📏 Size     : ${fileSize}
+│ 🌐 From     : ${result.from}
+│ 📅 Date     : ${result.date}
+│ 🕑 Time     : ${result.time}
+╰─────────────
+
+> ✨ ${botName}`;
+
+
+        // 🔹 Send file automatically (document type for .zip etc.)
+        await socket.sendMessage(sender, {
+            document: { url: downloadUrl },
+            fileName: filename,
+            mimetype: 'application/octet-stream',
+            caption: caption
+        }, { quoted: fakevcard });
+
+    } catch (err) {
+        console.error("Error in MediaFire downloader:", err);
+
+        // ✅ In catch also send Meta mention style
+        const sanitized = (number || '').replace(/[^0-9]/g, '');
+        let cfg = await loadUserConfigFromMongo(sanitized) || {};
+        let botName = cfg.botName || 'ғʀᴇᴇ';
+
+        await socket.sendMessage(sender, { text: '*❌ Internal Error. Please try again later.*' }, { quoted: fakevcard });
+    }
+    break;
+}
+case 'apksearch':
+case 'apk':
+case 'apkfind': {
+    try {
+        const text = (msg.message.conversation || msg.message.extendedTextMessage?.text || '').trim();
+        const query = text.split(" ").slice(1).join(" ").trim();
+
+        // ✅ Load bot name dynamically
+        const sanitized = (number || '').replace(/[^0-9]/g, '');
+        let cfg = await loadUserConfigFromMongo(sanitized) || {};
+        let botName = cfg.botName || 'ғʀᴇᴇ-xᴅ';
+
+        if (!query) {
+            return await socket.sendMessage(sender, {
+                text: '🚫 *Please provide an app name to search.*\n\nExample: .apksearch whatsapp',
+                buttons: [
+                    { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 }
+                ]
+            }, { quoted: fakevcard });
+        }
+
+        await socket.sendMessage(sender, { text: '*⏳ Searching APKs...*' }, { quoted: fakevcard });
+
+        // 🔹 Call API
+        const apiUrl = `https://tharuzz-ofc-apis.vercel.app/api/search/apksearch?query=${encodeURIComponent(query)}`;
+        const { data } = await axios.get(apiUrl);
+
+        if (!data.success || !data.result || !data.result.length) {
+            return await socket.sendMessage(sender, { text: '*❌ No APKs found for your query.*' }, { quoted: fakevcard });
+        }
+
+        // 🔹 Format results
+        let message = `🔍 *APK Search Results for:* ${query}\n\n`;
+        data.result.slice(0, 20).forEach((item, idx) => {
+            message += `*${idx + 1}.* ${item.name}\n➡️ ID: \`${item.id}\`\n\n`;
+        });
+        message += `_*© Powered by ${botName}*_`;
+
+        // 🔹 Send results
+        await socket.sendMessage(sender, {
+            text: message,
+            buttons: [
+                { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 },
+                { buttonId: `${config.PREFIX}alive`, buttonText: { displayText: '🪄 𝘉𝘰𝘵 𝘐𝘯𝘧𝘰' }, type: 1 }
+            ],
+            contextInfo: { mentionedJid: [sender] }
+        }, { quoted: fakevcard });
+
+    } catch (err) {
+        console.error("Error in APK search:", err);
+
+        const sanitized = (number || '').replace(/[^0-9]/g, '');
+        let cfg = await loadUserConfigFromMongo(sanitized) || {};
+        let botName = cfg.botName || 'free-mini';
+
+        await socket.sendMessage(sender, { text: '*❌ Internal Error. Please try again later.*' }, { quoted: fakevcard });
+    }
+    break;
+}
+
+// ==================== CREATIVE MENU ====================
+case 'creative': {
+  try { await socket.sendMessage(sender, { react: { text: "🎨", key: msg.key } }); } catch(e){}
+
+  try {
+    let userCfg = {};
+    try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
+    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
+
+    const text = `
+ 
+  \`🎨 Cʀᴇᴀᴛɪᴠᴇ ᴍᴇɴᴜ 🎨\`
+
+╭─ 🤖 𝐀𝐈 𝐅𝐄𝐀𝐓𝐔𝐑𝐄𝐒
+│ ✦ ${config.PREFIX}ai [message]
+│ more soon
+╰────────
+
+╭─ ✍️ 𝐓𝐄𝐗𝐓 𝐓𝐎𝐎𝐋𝐒
+│ soon
+╰────────
+
+╭─ 🖼️ 𝐈𝐌𝐀𝐆𝐄 𝐓𝐎𝐎𝐋𝐒
+│ coming soon
+╰────────
+
+╭─ 💾 𝐌𝐄𝐃𝐈𝐀 𝐒𝐀𝐕𝐄𝐑
+│ coming soon
+╰────────
+
+`.trim();
+
+    const buttons = [
+      { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 },
+      { buttonId: `${config.PREFIX}download`, buttonText: { displayText: "📥 ᴅʟ ᴍᴇɴᴜ" }, type: 1 }
+    ];
+
+    await socket.sendMessage(sender, {
+      text,
+      footer: "🎨 𝘊𝘳𝘦𝘢𝘵𝘪𝘷𝘦 𝘊𝘰𝘮𝘮𝘢𝘯𝘥𝘴",
+      buttons
+    }, { quoted: fakevcard });
+
+  } catch (err) {
+    console.error('creative command error:', err);
+    try { await socket.sendMessage(sender, { text: '❌ Failed to show creative menu.' }, { quoted: msg }); } catch(e){}
+  }
+  break;
+}
+// ==================== CREATIVE CMDS ====================
+case 'ai':
+case 'chat':
+case 'gpt': {
+  try {
+    const text =
+      msg.message.conversation ||
+      msg.message.extendedTextMessage?.text ||
+      '';
+
+    const args = text.split(" ").slice(1);
+    const prompt = args.join(" ").trim();
+
+    if (!prompt) {
+      await socket.sendMessage(sender, { 
+        text: '*🚫 Please provide a message for AI.*',
+        buttons: [
+          { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📋 MENU' }, type: 1 }
+        ]
+      }, { quoted: fakevcard });
+      break;
+    }
+
+    // 🔹 Load bot name
+    const sanitized = (number || '').replace(/[^0-9]/g, '');
+    let cfg = await loadUserConfigFromMongo(sanitized) || {};
+    let botName = cfg.botName || 'free';
+
+    await socket.sendMessage(sender, { react: { text: '🤖', key: msg.key } });
+    await socket.sendMessage(sender, { 
+      text: '*⏳ AI thinking...*' 
+    }, { quoted: fakevcard });
+
+    // 🔥 MALVIN AI API
+    const apiUrl = `https://api.malvin.gleeze.com/ai/openai?text=${encodeURIComponent(prompt)}`;
+
+    console.log(`Fetching AI response for: ${prompt.substring(0, 50)}...`);
+
+    const response = await axios.get(apiUrl, {
+      timeout: 30000,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+        'Accept': 'application/json'
+      }
+    });
+
+    const aiReply =
+      response?.data?.result ||
+      response?.data?.response ||
+      response?.data?.reply ||
+      response?.data?.text;
+
+    if (!aiReply) {
+      await socket.sendMessage(sender, { 
+        text: '*🤖 AI reply not found.*',
+        buttons: [
+          { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 }
+        ]
+      }, { quoted: fakevcard });
+      break;
+    }
+
+    await socket.sendMessage(sender, {
+      text: aiReply,
+      footer: `🤖 ${botName}`,
+      buttons: [
+        { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 },
+        { buttonId: `${config.PREFIX}alive`, buttonText: { displayText: '📡 𝘉𝘰𝘵 𝘐𝘯𝘧𝘰' }, type: 1 }
+      ],
+      headerType: 1
+    }, { quoted: fakevcard });
+
+  } catch (err) {
+    console.error("*Error in AI chat*", err);
+    await socket.sendMessage(sender, { 
+      text: '*❌ Internal AI Error. Please try again later.*',
+      buttons: [
+        { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: '📜 ᴍᴇɴᴜ' }, type: 1 }
+      ]
+    }, { quoted: fakevcard });
+  }
+  break;
+}
+
+// ==================== TOOLS MENU ====================
+case 'tools': {
+  try { await socket.sendMessage(sender, { react: { text: "🔧", key: msg.key } }); } catch(e){}
+
+  try {
+    let userCfg = {};
+    try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
+    const title = userCfg.botName || ' © ғʀᴇᴇ ᴍɪɴɪ';
+    
+    const text = `
+ \`🛠️ Tᴏᴏʟs ᴍᴇɴᴜ 🛠️\`
+
+╭─ 📊 𝐁𝐎𝐓 𝐒𝐓𝐀𝐓𝐔𝐒
+│ ✦ ${config.PREFIX}ping
+│ ✦ ${config.PREFIX}alive
+╰─────
+> more soon
+
+`.trim();
+
+    const buttons = [
+      { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 },
+      { buttonId: `${config.PREFIX}settings`, buttonText: { displayText: "⚙️ sᴇᴛᴛɪɴɢs" }, type: 1 }
+    ];
+
+    await socket.sendMessage(sender, {
+      text,
+      footer: "🔧 𝘛𝘰𝘰𝘭𝘴 𝘊𝘰𝘮𝘮𝘢𝘯𝘥𝘴",
+      buttons
+    }, { quoted: fakevcard });
+
+  } catch (err) {
+    console.error('tools command error:', err);
+    try { await socket.sendMessage(sender, { text: '❌ Failed to show tools menu.' }, { quoted: msg }); } catch(e){}
+  }
+  break;
+}
+
+
+case 'settings': {
+  try { await socket.sendMessage(sender, { react: { text: "⚙️", key: msg.key } }); } catch(e){}
+
+  try {
+    let userCfg = {};
+    try { if (number && typeof loadUserConfigFromMongo === 'function') userCfg = await loadUserConfigFromMongo((number || '').replace(/[^0-9]/g, '')) || {}; } catch(e){ userCfg = {}; }
+    const title = userCfg.botName || '©ғʀᴇᴇ xᴅ';
+
+    const text = `
+
+  \`🛠️sᴇᴛᴛɪɴɢs ʟɪsᴛ\`
+
+╭─ 🤖 ʙᴏᴛ ᴄᴜsᴛᴏᴍɪᴢᴀᴛɪᴏɴs
+│coming soon
+╰────────>
+
+╭─ 📊 ᴄᴏɴғɪɢ ᴍɴɢ
+│ coming soon
+╰────────>
+
+╭─ 🗑️ sᴇssɪᴏɴ ᴍɴɢ
+│
+│ ✦ ${config.PREFIX}deleteme
+╰────────>
+
+`.trim();
+
+    const buttons = [
+      { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 },
+      { buttonId: `${config.PREFIX}owner`, buttonText: { displayText: "🥷 ᴏᴡɴᴇʀ" }, type: 1 }
+    ];
+
+    await socket.sendMessage(sender, {
+      text,
+      footer: "⚙️ 𝘚𝘦𝘵𝘵𝘪𝘯𝘨𝘴 𝘊𝘰𝘮𝘮𝘢𝘯𝘥𝘴",
+      buttons
+    }, { quoted: fakevcard });
+
+  } catch (err) {
+    console.error('settings command error:', err);
+    try { await socket.sendMessage(sender, { text: '❌ Failed to show settings menu.' }, { quoted: msg }); } catch(e){}
+  }
+  break;
+}
+
+
+//================ALIVE=========
+case 'alive': {
+  try {
+    const sanitized = (number || '').replace(/[^0-9]/g, '');
+    const cfg = await loadUserConfigFromMongo(sanitized) || {};
+    const botName = cfg.botName || BOT_NAME_FANCY;
+    const logo = cfg.logo || config.RCD_IMAGE_PATH;
+
+    const startTime = socketCreationTime.get(number) || Date.now();
+    const uptime = Math.floor((Date.now() - startTime) / 1000);
+    const hours = Math.floor(uptime / 3600);
+    const minutes = Math.floor((uptime % 3600) / 60);
+    const seconds = Math.floor(uptime % 60);
+
+    const text = `
+*HI 👋 ${botName} Usᴇʀ I ᴀᴍ ᴀʟɪᴠᴇ ⏰*
+
+*╭─「 𝐒ᴛᴀᴛᴜꜱ 𝐃ᴇᴛᴀɪʟꜱ 」 ─➤*  
+*│*👤 *Usᴇʀ :*
+*│*🥷 *Oᴡɴᴇʀ :* ${config.OWNER_NAME || 'ᴍʀ xᴅᴋɪɴɢ'}
+*│*✒️ *Pʀᴇғɪx :* .
+*│*🧬 *Vᴇʀsɪᴏɴ :*  ${config.BOT_VERSION || 'ʟᴀᴛᴇsᴛ'}
+*│*🎈 *Pʟᴀᴛғᴏʀᴍ :* ${process.env.PLATFORM || 'Hᴇʀᴏᴋᴜ'}
+*│*📟 *Uᴘᴛɪᴍᴇ :* ${hours}h ${minutes}m ${seconds}s
+*╰────────●●➤*
+
+> *${botName}*
+`;
+
+    const buttons = [
+      { buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜 ᴍᴇɴᴜ" }, type: 1 },
+      { buttonId: `${config.PREFIX}ping`, buttonText: { displayText: "⚡ ᴘɪɴɢ" }, type: 1 }
+    ];
+
+    let imagePayload = String(logo).startsWith('http') ? { url: logo } : fs.readFileSync(logo);
+
+    await socket.sendMessage(sender, {
+      image: imagePayload,
+      caption: text,
+      footer: `*${botName} ᴀʟɪᴠᴇ ɴᴏᴡ*`,
+      buttons,
+      headerType: 4
+    }, { quoted: fakevcard });
+
+  } catch(e) {
+    console.error('alive error', e);
+    await socket.sendMessage(sender, { text: '*❌ Failed to send alive status.*' }, { quoted: msg });
+  }
+  break;
+}
+
+// ---------------------- PING ----------------------
+case 'ping': {
+  try {
+    const sanitized = (number || '').replace(/[^0-9]/g, '');
+    const cfg = await loadUserConfigFromMongo(sanitized) || {};
+    const botName = cfg.botName || BOT_NAME_FREE;
+    const logo = cfg.logo || config.IMAGE_PATH;
+
+    const latency = Date.now() - (msg.messageTimestamp * 1000 || Date.now());
+
+    const text = `
+*📡 ${botName} ᴘɪɴɢ ɴᴏᴡ*
+
+*◈ 🛠️ 𝐋atency :*  ${latency}ms
+*◈ 🕢 𝐒erver 𝐓ime :* ${new Date().toLocaleString()}
+`;
+
+    let imagePayload = String(logo).startsWith('http') ? { url: logo } : fs.readFileSync(logo);
+
+    await socket.sendMessage(sender, {
+      image: imagePayload,
+      caption: text,
+      footer: `*${botName} ᴘɪɴɢ*`,
+      buttons: [{ buttonId: `${config.PREFIX}menu`, buttonText: { displayText: "📜ᴍᴇɴᴜ" }, type: 1 }],
+      headerType: 4
+    }, { quoted: fakevcard });
+
+  } catch(e) {
+    console.error('ping error', e);
+    await socket.sendMessage(sender, { text: '❌ Failed to get ping.' }, { quoted: msg });
+  }
+  break;
+}
+
 //======== support ========//
 // u can remove this case block 
 case 'support': {
